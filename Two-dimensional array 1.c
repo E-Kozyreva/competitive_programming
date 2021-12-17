@@ -1,62 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+
+
+typedef struct data_types{
+  int sum[10000];
+  int count_positive_numbers[10000];
+  int count_multiple_elements[10000];
+} data;
+
+
+int restart();
 
 
 void sum_of_odd_elements(int count, int numbers_array[2][count / 2]){
 
-  int sum; 
-  printf("\nСУММА НЕЧЁТНЫХ ЭЛЕМЕНТОВ:");
+  data all_data;
 
   for (int i = 0; i < 1; i++){
     for (int j = 0; j < count / 2; j++){
 
-      if (numbers_array[i][j] % 2 != 0 && numbers_array[i + 1][j] % 2 != 0){
-        sum = numbers_array[i][j] + numbers_array[i + 1][j];
-        printf("\nСумма нечётных элементов %d столбца: %d.", j + 1, sum);
-      }
-      else if (numbers_array[i][j] % 2 != 0 && numbers_array[i + 1][j] % 2 == 0){
-        sum = numbers_array[i][j];
-        printf("\nСумма нечётных элементов %d столбца: %d.", j + 1, sum);
-      }
-      else if (numbers_array[i][j] % 2 == 0 && numbers_array[i + 1][j] % 2 != 0){
-        sum = numbers_array[i + 1][j];
-        printf("\nСумма нечётных элементов %d столбца: %d.", j + 1, sum);
-      }
-      else{
-        printf("\nВ %d столбце нет нечётных элементов.", j + 1);
-      }
+      if (numbers_array[i][j] % 2 != 0 && numbers_array[i + 1][j] % 2 != 0)
+        all_data.sum[j] = numbers_array[i][j] + numbers_array[i + 1][j];
+      else if (numbers_array[i][j] % 2 != 0 && numbers_array[i + 1][j] % 2 == 0)
+        all_data.sum[j] = numbers_array[i][j];
+      else if (numbers_array[i][j] % 2 == 0 && numbers_array[i + 1][j] % 2 != 0)
+        all_data.sum[j] = numbers_array[i + 1][j];
+      else
+        all_data.sum[j] = 0;
     }
-    printf("\n");
+  }
+
+  printf("\nСУММА НЕЧЁТНЫХ ЭЛЕМЕНТОВ:\n");
+  for (int column = 0; column < count / 2; column++){
+    printf("%d столбец: %d\n", column + 1, all_data.sum[column]);
   }
 }
 
 
-void count_of_abs_elements(int count, int numbers_array[2][count]){
+void count_of_abs_elements(int count, int numbers_array[2][count / 2]){ 
 
-  printf("\nКОЛИЧЕСТВО ПОЛОЖИТЕЛЬНЫХ ЭЛЕМЕНТОВ:");
-
+  data all_data;
+  
   for (int i = 0; i < 1; i++){
     for (int j = 0; j < count / 2; j++){
 
       if (numbers_array[i][j] > 0 && numbers_array[i + 1][j] > 0)
-        printf("\nКоличество положительных элементов %d столбца: %d.", j + 1, 2);
+        all_data.count_positive_numbers[j] = 2;
       else if (numbers_array[i][j] > 0 || numbers_array[i + 1][j] > 0)
-        printf("\nКоличество положительных элементов %d столбца: %d.", j + 1, 1);
+        all_data.count_positive_numbers[j] = 1;
       else if (numbers_array[i][j] < 0 && numbers_array[i + 1][j] < 0)
-        printf("\nКоличество положительных элементов %d столбца: %d.", j + 1, 0);
+        all_data.count_positive_numbers[j] = -1;
       else if (numbers_array[i][j] == 0 && numbers_array[i + 1][j] == 0)
-        printf("\nВ %d столбце оба числа равны 0.", j + 1);
+        all_data.count_positive_numbers[j] = 0;
     }
-    printf("\n");
+  }
+
+  printf("\nКОЛИЧЕСТВО ПОЛОЖИТЕЛЬНЫХ ЭЛЕМЕНТОВ:\n");
+  for (int column = 0; column < count / 2; column++){
+    printf("%d столбец: %d\n", column + 1, all_data.count_positive_numbers[column]);
   }
 }
 
 
-void count_of_multiple_lements(int count, int numbers_array[2][count]){
+void count_of_multiple_lements(int count, int numbers_array[2][count / 2]){ 
 
-  printf("\nКОЛИЧЕСТВО ЭЛЕМЕНТОВ КРАТНЫХ A И B:"); 
-
+  data all_data;
   int a, b;
 
   printf("\nВведите 2 числа, которым должны быть кратны элементы массива:\n");
@@ -67,25 +75,22 @@ void count_of_multiple_lements(int count, int numbers_array[2][count]){
 
   for (int i = 0; i < 1; i++){
     for (int j = 0; j < count / 2; j++){
+      
+      int count = 0;
+      if (numbers_array[i][j] % a == 0 && numbers_array[i][j] % b == 0)
+        count++;
+      if (numbers_array[i + 1][j] % a == 0 && numbers_array[i + 1][j] % b == 0)
+        count++;
 
-      if (numbers_array[i][j] % a == 0 && numbers_array[i][j] % b == 0){
-        if (numbers_array[i + 1][j] % a == 0 && numbers_array[i + 1][j] % b == 0)
-          printf("\nКоличество элементов кратных %d и %d в %d столбце: %d.", a, b, j + 1,  2);
-        else 
-          printf("\nКоличество элементов кратных %d и %d в %d столбце: %d.", a, b, j + 1,  1);
-      }
-      else if (numbers_array[i + 1][j] % a == 0 && numbers_array[i + 1][j] % b == 0)
-        printf("\nКоличество элементов кратных %d и %d в %d столбце: %d.", a, b, j + 1,  1);
-      else{
-        printf("\nКоличество элементов кратных %d и %d в %d столбце: %d.", a, b, j + 1, 0);
-      }
+      all_data.count_multiple_elements[j] = count;
     }
-    printf("\n");
+  }
+
+  printf("\nКОЛИЧЕСТВО ЭЛЕМЕНТОВ КРАТНЫХ A И B:\n"); 
+  for (int column = 0; column < count / 2; column++){
+    printf("%d столбец: %d\n", column + 1, all_data.count_multiple_elements[column]);
   }
 }
-
-
-int restart();
 
 
 int main(){
@@ -115,7 +120,6 @@ int main(){
   sum_of_odd_elements(count_numbers, numbers_array);
   count_of_abs_elements(count_numbers, numbers_array);
   count_of_multiple_lements(count_numbers, numbers_array);
-
   restart();
 
   return 0;
@@ -126,7 +130,7 @@ int restart(){
 
   int answer;
 
-  printf("\nХотите сгенерировать новый двумерный массив?\n");
+  printf("\n\nХотите сгенерировать новый двумерный массив?\n");
   printf("1.Да.\n2.Нет.\nВыш ответ: ");
   scanf("%d", &answer);
 
