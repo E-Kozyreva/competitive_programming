@@ -1,6 +1,6 @@
 def max_element(count):
     matrix = list(map(int, input().split()))
-    max_element, elements = matrix[0], []
+    max_element = matrix[0]
     for _ in range(1, count):
         matrix = list(map(int, input().split()))
         if max_element < max(matrix[:_ + 1]):
