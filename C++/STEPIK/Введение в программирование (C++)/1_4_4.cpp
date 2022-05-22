@@ -13,7 +13,6 @@ int main()
 {
     int a, b, c;
     std::cin >> a >> b >> c;
-    
     FindTriangle(a, b, c);
     return 0;
 }
